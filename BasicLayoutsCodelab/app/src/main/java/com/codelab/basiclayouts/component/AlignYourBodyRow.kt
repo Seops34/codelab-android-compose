@@ -10,10 +10,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.codelab.basiclayouts.R
+import com.codelab.basiclayouts.model.DrawableStringPair
+
+private val alignYourBodyData = listOf(
+    R.drawable.ab1_inversions to R.string.ab1_inversions,
+    R.drawable.ab2_quick_yoga to R.string.ab2_quick_yoga,
+    R.drawable.ab3_stretching to R.string.ab3_stretching,
+    R.drawable.ab4_tabata to R.string.ab4_tabata,
+    R.drawable.ab5_hiit to R.string.ab5_hiit,
+    R.drawable.ab6_pre_natal_yoga to R.string.ab6_pre_natal_yoga
+).map { DrawableStringPair(it.first, it.second) }
 
 @Composable
 fun AlignYourBodyRow(
-    items: List<String>,
     modifier: Modifier = Modifier,
 ) {
     LazyRow(
@@ -21,7 +30,7 @@ fun AlignYourBodyRow(
         contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(items) {
+        items(alignYourBodyData) {
             AlignYourBodyElement(
                 imgRes = R.drawable.ab5_hiit,
                 titleRes = R.string.ab5_hiit
@@ -34,8 +43,6 @@ fun AlignYourBodyRow(
 @Composable
 private fun PreviewAlignYourBodyRow() {
     MaterialTheme {
-        AlignYourBodyRow(
-            items = (1..10).map { "${it}" }
-        )
+        AlignYourBodyRow()
     }
 }
