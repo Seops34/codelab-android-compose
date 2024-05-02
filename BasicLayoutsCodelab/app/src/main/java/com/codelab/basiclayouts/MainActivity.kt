@@ -19,19 +19,88 @@ package com.codelab.basiclayouts
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.codelab.basiclayouts.component.SootheBottomNavigation
+import com.codelab.basiclayouts.component.SootheNavigationRail
+import com.codelab.basiclayouts.screen.HomeScreen
 import com.codelab.basiclayouts.ui.theme.MySootheTheme
 
 class MainActivity : ComponentActivity() {
+
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContent { MySootheApp() }
+        setContent {
+            MySootheTheme {
+                val windowSizeClass = calculateWindowSizeClass(this)
+                MySootheApp(windowSizeClass)
+            }
+        }
     }
 }
+
+@Composable
+fun MySootheApp(windowSize: WindowSizeClass) {
+    when (windowSize.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> {
+            MySootheAppPortrait()
+        }
+        WindowWidthSizeClass.Medium,
+        WindowWidthSizeClass.Expanded -> {
+            MySootheAppLandscape()
+        }
+    }
+}
+
+@Composable
+fun MySootheAppPortrait() {
+    Scaffold(
+        bottomBar = { SootheBottomNavigation() }
+    ) {
+        HomeScreen(
+            modifier = Modifier.padding(it)
+        )
+    }
+}
+
+@Composable
+fun MySootheAppLandscape() {
+    Surface(
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Row {
+            SootheNavigationRail()
+            HomeScreen()
+        }
+    }
+}
+
+
+@Preview
+@Composable
+private fun PreviewMySoothAppProtrait() {
+    MySootheTheme {
+        MySootheAppPortrait()
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewMySootheAppLandscape() {
+    MySootheTheme {
+        MySootheAppLandscape()
+    }
+}
+
 
